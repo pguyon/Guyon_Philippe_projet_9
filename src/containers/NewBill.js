@@ -28,7 +28,12 @@ export default class NewBill {
     formData.append("file", file);
     formData.append("email", email);
 
-    this.store
+    // Create Regex
+    const regexFile = /.(jpg|jpeg|png)$/i;
+
+    // Check if file extension match with Regex
+    if(e.target.value.match(regexFile)){
+      this.store
       .bills()
       .create({
         data: formData,
@@ -43,6 +48,11 @@ export default class NewBill {
         this.fileName = fileName;
       })
       .catch((error) => console.error(error));
+    }else {
+      // Create alert warning for wrong extension
+      alert('Format non valide. Formats acceptés: jpg, jpeg ou png.')
+      this.document.querySelector(`input[data-testid="file"]`).value = ''
+    }
   };
 
   handleSubmit = (e) => {
