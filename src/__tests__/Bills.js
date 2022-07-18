@@ -51,4 +51,20 @@ describe("Given I am connected as an employee", () => {
         })
     })
 
+    // test for modal view
+    describe('When I click on icon eye', ()=>{
+      test('Then the modal should be displayed', async () =>{
+        const root = document.createElement("div");
+        root.setAttribute("id", "root");
+        document.body.append(root);
+        router();
+        window.onNavigate(ROUTES_PATH.Bills);
+        await waitFor(() => screen.getAllByTestId('icon-eye'))
+        // Simulate function
+        $.fn.modal = jest.fn();
+        fireEvent.click(screen.getAllByTestId("icon-eye")[0])
+        await waitFor(() => screen.getByText("Justificatif"));
+        expect(screen.getByText('Justificatif')).toBeTruthy()
+      })
+    })
 })
