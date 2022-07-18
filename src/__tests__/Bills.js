@@ -60,7 +60,7 @@ describe("Given I am connected as an employee", () => {
         router();
         window.onNavigate(ROUTES_PATH.Bills);
         await waitFor(() => screen.getAllByTestId('icon-eye'))
-        // Simulate function
+        // Simulate function with jQuery.prototype
         $.fn.modal = jest.fn();
         fireEvent.click(screen.getAllByTestId("icon-eye")[0])
         await waitFor(() => screen.getByText("Justificatif"));
