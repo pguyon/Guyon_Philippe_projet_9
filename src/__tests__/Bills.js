@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {screen, waitFor} from "@testing-library/dom"
+ import { fireEvent, screen, wait, waitFor } from "@testing-library/dom";
 import BillsUI from "../views/BillsUI.js"
 import {bills} from "../fixtures/bills.js"
 import {ROUTES_PATH} from "../constants/routes.js";
@@ -38,7 +38,17 @@ describe("Given I am connected as an employee", () => {
     })
     // test new bill button
     describe('When I click on new Bill button', () => {
-        test('Then the new bill page should be displayed', async () => {})
+        test('Then the new bill page should be displayed', async () => {
+            const root = document.createElement("div")
+            root.setAttribute("id", "root")
+            document.body.append(root)
+            router()
+            window.onNavigate(ROUTES_PATH.Bills)
+            await waitFor(() => screen.getByTestId("btn-new-bill"));
+            fireEvent.click(screen.getByTestId("btn-new-bill"))
+            await waitFor(() => screen.getByTestId("form-new-bill"))
+            expect(screen.getByTestId('form-new-bill')).toBeTruthy()
+        })
     })
 
 })
