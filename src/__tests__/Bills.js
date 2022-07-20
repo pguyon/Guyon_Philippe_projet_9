@@ -83,30 +83,36 @@ describe("Given I am connected as an employee", () => {
             expect(jest.spyOn(billsMocks, 'getBills')).toHaveBeenCalled()
         })
     })
-
-    // Integration tests
-    describe('When I am on Bills page', () => {
-        test('fetches bills from mock API GET', async () => {
-            const root = document.createElement("div");
-            root.setAttribute("id", "root");
-            document.body.append(root);
-            router();
-            window.onNavigate(ROUTES_PATH.Bills);
-            await waitFor(() => screen.getByText("Mes notes de frais"))
-            await waitFor(() => screen.getByText("Type"))
-            await waitFor(() => screen.getByText("Nom"))
-            await waitFor(() => screen.getByText("Date"))
-            await waitFor(() => screen.getByText("Montant"))
-            await waitFor(() => screen.getByText("Statut"))
-            await waitFor(() => screen.getByText("Actions"))
-
-            expect(screen.getByText("Mes notes de frais")).toBeTruthy()
-            expect(screen.getByText("Type")).toBeTruthy()
-            expect(screen.getByText("Nom")).toBeTruthy()
-            expect(screen.getByText("Date")).toBeTruthy()
-            expect(screen.getByText("Montant")).toBeTruthy()
-            expect(screen.getByText("Statut")).toBeTruthy()
-            expect(screen.getByText("Actions")).toBeTruthy()
-        })
-    })
 })
+
+
+// Integration tests
+describe('Given I am connected as an employee', () => {
+  describe('When I am on Bills page', () => {
+    test('fetches bills from mock API GET', async () => {
+        const root = document.createElement("div");
+        root.setAttribute("id", "root");
+        document.body.append(root);
+        router();
+        window.onNavigate(ROUTES_PATH.Bills);
+        await waitFor(() => screen.getByText("Mes notes de frais"))
+        await waitFor(() => screen.getByText("Type"))
+        await waitFor(() => screen.getByText("Nom"))
+        await waitFor(() => screen.getByText("Date"))
+        await waitFor(() => screen.getByText("Montant"))
+        await waitFor(() => screen.getByText("Statut"))
+        await waitFor(() => screen.getByText("Actions"))
+  
+        expect(screen.getByText("Mes notes de frais")).toBeTruthy()
+        expect(screen.getByText("Type")).toBeTruthy()
+        expect(screen.getByText("Nom")).toBeTruthy()
+        expect(screen.getByText("Date")).toBeTruthy()
+        expect(screen.getByText("Montant")).toBeTruthy()
+        expect(screen.getByText("Statut")).toBeTruthy()
+        expect(screen.getByText("Actions")).toBeTruthy()
+    })
+  })
+
+})
+
+
