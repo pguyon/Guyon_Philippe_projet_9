@@ -88,31 +88,60 @@ describe("Given I am connected as an employee", () => {
 
 // Integration tests
 describe('Given I am connected as an employee', () => {
-  describe('When I am on Bills page', () => {
-    test('fetches bills from mock API GET', async () => {
-        const root = document.createElement("div");
-        root.setAttribute("id", "root");
-        document.body.append(root);
-        router();
-        window.onNavigate(ROUTES_PATH.Bills);
-        await waitFor(() => screen.getByText("Mes notes de frais"))
-        await waitFor(() => screen.getByText("Type"))
-        await waitFor(() => screen.getByText("Nom"))
-        await waitFor(() => screen.getByText("Date"))
-        await waitFor(() => screen.getByText("Montant"))
-        await waitFor(() => screen.getByText("Statut"))
-        await waitFor(() => screen.getByText("Actions"))
-  
-        expect(screen.getByText("Mes notes de frais")).toBeTruthy()
-        expect(screen.getByText("Type")).toBeTruthy()
-        expect(screen.getByText("Nom")).toBeTruthy()
-        expect(screen.getByText("Date")).toBeTruthy()
-        expect(screen.getByText("Montant")).toBeTruthy()
-        expect(screen.getByText("Statut")).toBeTruthy()
-        expect(screen.getByText("Actions")).toBeTruthy()
+    describe('When I am on Bills page', () => {
+        test('fetches bills from mock API GET', async () => {
+            const root = document.createElement("div");
+            root.setAttribute("id", "root");
+            document.body.append(root);
+            router();
+            window.onNavigate(ROUTES_PATH.Bills);
+            await waitFor(() => screen.getByText("Mes notes de frais"))
+            await waitFor(() => screen.getByText("Type"))
+            await waitFor(() => screen.getByText("Nom"))
+            await waitFor(() => screen.getByText("Date"))
+            await waitFor(() => screen.getByText("Montant"))
+            await waitFor(() => screen.getByText("Statut"))
+            await waitFor(() => screen.getByText("Actions"))
+
+            expect(screen.getByText("Mes notes de frais")).toBeTruthy()
+            expect(screen.getByText("Type")).toBeTruthy()
+            expect(screen.getByText("Nom")).toBeTruthy()
+            expect(screen.getByText("Date")).toBeTruthy()
+            expect(screen.getByText("Montant")).toBeTruthy()
+            expect(screen.getByText("Statut")).toBeTruthy()
+            expect(screen.getByText("Actions")).toBeTruthy()
+        })
     })
-  })
+    describe('When an error occurs on API', () => {
+        beforeEach(() => {
+            jest.spyOn(mockStore, "bills");
+        });
+        test('fetches bills from an API and fails with 404 message error', async () => {
+            mockStore.bills.mockImplementationOnce(() => {
+                return {
+                    list: () => {
+                        return Promise.reject(new Error("Erreur 404"));
+                    }
+                };
+            });
+            const html = BillsUI({error: "Erreur 404"});
+            document.body.innerHTML = html;
+            const message = await screen.getByText(/Erreur 404/);
+            expect(message).toBeTruthy();
+        })
+        test('Fetches bills from an API and fails with 500 message error', async () => {
+            mockStore.bills.mockImplementationOnce(() => {
+                return {
+                    list: () => {
+                        return Promise.reject(new Error("Erreur 500"));
+                    }
+                };
+            });
+            const html = BillsUI({error: "Erreur 500"});
+            document.body.innerHTML = html;
+            const message = await screen.getByText(/Erreur 500/);
+            expect(message).toBeTruthy();
+        })
+    })
 
 })
-
-
