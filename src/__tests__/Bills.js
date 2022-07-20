@@ -14,10 +14,10 @@ import mockStore from "../__mocks__/store"
 
 // Initiate status employe
 Object.defineProperty(window, 'localStorage', {value: localStorageMock})
-window.localStorage.setItem('user', JSON.stringify({type: 'Employee', email: "employee@test.tld"}))
+window.localStorage.setItem('user', JSON.stringify({type: 'Employee'}))
 
 const onNavigate = (pathname) => {
-  document.body.innerHTML = ROUTES({ pathname });
+    document.body.innerHTML = ROUTES({pathname});
 };
 
 
@@ -83,4 +83,13 @@ describe("Given I am connected as an employee", () => {
             expect(jest.spyOn(billsMocks, 'getBills')).toHaveBeenCalled()
         })
     })
+})
+
+// Integration tests
+describe('Given I am an user connected as employee',() => {
+  describe('When I am on Bills page', ()=> {
+    test('fetches bills from mock API GET', async () => {
+      
+    })
+  })
 })
