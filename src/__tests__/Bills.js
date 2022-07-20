@@ -2,17 +2,23 @@
  * @jest-environment jsdom
  */
 
- import { fireEvent, screen, wait, waitFor } from "@testing-library/dom";
+import {fireEvent, screen, waitFor} from "@testing-library/dom";
 import BillsUI from "../views/BillsUI.js"
+import {localStorageMock} from "../__mocks__/localStorage.js"
+import Bills from "../containers/Bills.js"
 import {bills} from "../fixtures/bills.js"
 import {ROUTES_PATH} from "../constants/routes.js";
-import {localStorageMock} from "../__mocks__/localStorage.js";
 import router from "../app/Router.js";
+import mockStore from "../__mocks__/store"
 
 
 // Initiate status employe
 Object.defineProperty(window, 'localStorage', {value: localStorageMock})
 window.localStorage.setItem('user', JSON.stringify({type: 'Employee', email: "employee@test.tld"}))
+
+const onNavigate = (pathname) => {
+  document.body.innerHTML = ROUTES({ pathname });
+};
 
 
 describe("Given I am connected as an employee", () => {
@@ -52,19 +58,29 @@ describe("Given I am connected as an employee", () => {
     })
 
     // test for modal view
-    describe('When I click on icon eye', ()=>{
-      test('Then the modal should be displayed', async () =>{
-        const root = document.createElement("div");
-        root.setAttribute("id", "root");
-        document.body.append(root);
-        router();
-        window.onNavigate(ROUTES_PATH.Bills);
-        await waitFor(() => screen.getAllByTestId('icon-eye'))
-        // Simulate function with jQuery.prototype
-        $.fn.modal = jest.fn();
-        fireEvent.click(screen.getAllByTestId("icon-eye")[0])
-        await waitFor(() => screen.getByText("Justificatif"));
-        expect(screen.getByText('Justificatif')).toBeTruthy()
-      })
+    describe('When I click on icon eye', () => {
+        test('Then the modal should be displayed', async () => {
+            const root = document.createElement("div");
+            root.setAttribute("id", "root");
+            document.body.append(root);
+            router();
+            window.onNavigate(ROUTES_PATH.Bills);
+            await waitFor(() => screen.getAllByTestId('icon-eye'))
+            // Simulate function with jQuery.prototype
+            $.fn.modal = jest.fn();
+            fireEvent.click(screen.getAllByTestId("icon-eye")[0])
+            await waitFor(() => screen.getByText("Justificatif"));
+            expect(screen.getByText('Justificatif')).toBeTruthy()
+        })
+    })
+
+    // Test getBills()
+    describe('When  page is loaded', () => {
+        test('Then getBill() should be call', async () => {
+            const billsMocks = new Bills({document, onNavigate, store: mockStore, localStorage: window.localStorage})
+            jest.spyOn(billsMocks, 'getBills')
+            await billsMocks.getBills()
+            expect(jest.spyOn(billsMocks, 'getBills')).toHaveBeenCalled()
+        })
     })
 })
