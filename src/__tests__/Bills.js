@@ -7,7 +7,7 @@ import BillsUI from "../views/BillsUI.js"
 import {localStorageMock} from "../__mocks__/localStorage.js"
 import Bills from "../containers/Bills.js"
 import {bills} from "../fixtures/bills.js"
-import {ROUTES_PATH} from "../constants/routes.js";
+import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
 import router from "../app/Router.js";
 import mockStore from "../__mocks__/store"
 
@@ -17,9 +17,8 @@ Object.defineProperty(window, 'localStorage', {value: localStorageMock})
 window.localStorage.setItem('user', JSON.stringify({type: 'Employee', email: "employee@test.tld"}))
 
 const onNavigate = (pathname) => {
-    document.body.innerHTML = ROUTES({pathname});
-};
-
+    document.body.innerHTML = ROUTES({ pathname });
+  };
 
 describe("Given I am connected as an employee", () => {
     describe("When I am on Bills Page", () => {
@@ -126,7 +125,7 @@ describe('Given I am connected as an employee', () => {
             });
             const html = BillsUI({error: "Erreur 404"});
             document.body.innerHTML = html;
-            const message = await screen.getByText(/Erreur 404/);
+            const message =  screen.getByText(/Erreur 404/);
             expect(message).toBeTruthy();
         })
         test('Fetches bills from an API and fails with 500 message error', async () => {
@@ -139,7 +138,7 @@ describe('Given I am connected as an employee', () => {
             });
             const html = BillsUI({error: "Erreur 500"});
             document.body.innerHTML = html;
-            const message = await screen.getByText(/Erreur 500/);
+            const message =  screen.getByText(/Erreur 500/);
             expect(message).toBeTruthy();
         })
     })
