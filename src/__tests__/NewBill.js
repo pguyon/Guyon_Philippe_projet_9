@@ -69,7 +69,7 @@ describe("Given I am connected as an employee, and I try to submit a PNG file", 
         expect(input.files[0].name).toBe('essence.png')
     });
 })
-describe("Given I am connected as an employee, and I try to submit a PDF file", () => {
+describe("Given I am connected as an employee, and I try to submit a file that is not an image", () => {
     test("Then an alert message should be displayed", () => {
         document.body.innerHTML = NewBillUI();
         jest.spyOn(Store.api, 'post').mockImplementation(mockStore.post)
@@ -175,8 +175,7 @@ describe('Given I am connected as an employee, and I try to submit a new bill', 
             })
             await new Promise(process.nextTick);
             document.body.innerHTML = BillsUI({error: 'Erreur 404'})
-            const message = screen.getByText(/Erreur 404/)
-            expect(message).toBeTruthy()
+            expect(screen.getByText(/Erreur 404/)).toBeTruthy()
         })
 
         test("fetches messages from an API and fails with 500 message error", async () => {
@@ -189,8 +188,7 @@ describe('Given I am connected as an employee, and I try to submit a new bill', 
             })
             await new Promise(process.nextTick);
             document.body.innerHTML = BillsUI({error: 'Erreur 500'})
-            const message = screen.getByText(/Erreur 500/)
-            expect(message).toBeTruthy()
+            expect(screen.getByText(/Erreur 500/)).toBeTruthy()
         })
     })
 })
